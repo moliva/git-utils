@@ -1,10 +1,19 @@
 #!/usr/bin/env sh
 
 DIR="$(dirname "$(readlink "$0")")"
+UTILS_DIR="`dirname "$DIR"`/utils"
 
-GIT_PAGER="../utils/less -k ../utils/review-lesskey"
+#GIT_PAGER="$UTILS_DIR/less --lesskey-file=$UTILS_DIR/review-lesskey"
+
+# backup lesskey env
+ORIGINAL_LESSKEY=$LESSKEY
+
+# set working vars
+export LESSKEY="$UTILS_DIR/review-lesskey"
+GIT_PAGER="$UTILS_DIR/less"
 export GSARLANGA_PID=$$
 
+# set trap for SIGINT
 trap "exit" SIGINT
 
 for file in `git diff --name-only`; do
@@ -12,3 +21,6 @@ for file in `git diff --name-only`; do
 	git diff "$file"
 done
 
+# return envs back to original
+export LESSKEY=$ORIGINAL_LESSKEY
+unset GSARLANGA_PID
