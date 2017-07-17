@@ -29,7 +29,7 @@ git clone $REPO_LOCATION $DOTFILES
 cd $DOTFILES
 
 info "creating symlink git-utils/bin to /usr/local/bin"
-ln -s $DOTFILES/bin /usr/local/bin
+ln -s $DOTFILES/bin/git-review /usr/local/bin/git-review
 
 success "installed git-utils"
 
