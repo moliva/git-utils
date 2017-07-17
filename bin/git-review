@@ -1,7 +1,6 @@
 #!/usr/bin/env sh
 
-#DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-DIR=$(dirname "$0")
+DIR="$(dirname "$(readlink "$0")")"
 
 GIT_PAGER="../utils/less -k ../utils/review-lesskey"
 export GSARLANGA_PID=$$
