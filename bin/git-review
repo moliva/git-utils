@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+
+#DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DIR=$(dirname "$0")
+
+GIT_PAGER="../utils/less -k ../utils/review-lesskey"
+export GSARLANGA_PID=$$
+
+trap "exit" SIGINT
+
+for file in `git diff --name-only`; do
+	export CURRENT_EDITING_FILE="$file"
+	git diff "$file"
+done
+
