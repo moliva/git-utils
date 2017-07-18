@@ -34,7 +34,7 @@ info "creating symlink git-utils/bin to /usr/local/bin"
 GIT_REVIEW_BIN="$INSTALLATION_DIR/bin/git-review"
 GIT_REVIEW_BIN_SYMLINK="/usr/local/bin/git-review"
 
-[[ -d "$GIT_REVIEW_BIN_SYMLINK" ]] && rm "$GIT_REVIEW_BIN_SYMLINK"
+[[ -f "$GIT_REVIEW_BIN_SYMLINK" ]] && rm "$GIT_REVIEW_BIN_SYMLINK"
 ln -s "$GIT_REVIEW_BIN" "$GIT_REVIEW_BIN_SYMLINK"
 
 success "installed git-utils"
