@@ -3,14 +3,12 @@
 DIR="$(dirname "$(readlink "$0")")"
 UTILS_DIR="`dirname "$DIR"`/utils"
 
-#GIT_PAGER="$UTILS_DIR/less --lesskey-file=$UTILS_DIR/review-lesskey"
-
 # backup lesskey env
-ORIGINAL_LESSKEY=$LESSKEY
+ORIGINAL_GIT_PAGER="`git config --get core.pager`"
 
 # set working vars
-export LESSKEY="$UTILS_DIR/review-lesskey"
-GIT_PAGER="$UTILS_DIR/less"
+REVIEW_GIT_PAGER="$UTILS_DIR/less --lesskey-file=$UTILS_DIR/review-lesskey"
+git config core.pager "$REVIEW_GIT_PAGER"
 export GSARLANGA_PID=$$
 
 # set trap for SIGINT
@@ -22,5 +20,5 @@ for file in `git diff --name-only`; do
 done
 
 # return envs back to original
-export LESSKEY=$ORIGINAL_LESSKEY
 unset GSARLANGA_PID
+git config core.pager "$ORIGINAL_GIT_PAGER"
