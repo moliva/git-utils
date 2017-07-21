@@ -1,5 +1,15 @@
 #!/usr/bin/env sh
 
+onexit() {
+	# return envs back to original
+	unset GSARLANGA_PID
+	if [[ -z "${ORIGINAL_GIT_PAGER/ /}" ]]; then
+		git config --unset core.pager
+	else
+		git config core.pager "$ORIGINAL_GIT_PAGER"
+	fi
+}
+
 DIR="$(dirname "$(readlink "$0")")"
 UTILS_DIR="`dirname "$DIR"`/utils"
 
@@ -13,12 +23,10 @@ export GSARLANGA_PID=$$
 
 # set trap for SIGINT
 trap "exit" SIGINT
+trap onexit EXIT
 
 for file in `git diff --name-only`; do
 	export CURRENT_EDITING_FILE="$file"
 	git diff "$file"
 done
 
-# return envs back to original
-unset GSARLANGA_PID
-git config core.pager "$ORIGINAL_GIT_PAGER"
