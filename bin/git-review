@@ -27,6 +27,6 @@ trap onexit EXIT
 
 for file in `git diff --name-only`; do
 	export CURRENT_EDITING_FILE="$file"
-	git diff "$file"
+	git diff -- "$file"
 done
 
