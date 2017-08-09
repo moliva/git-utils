@@ -25,8 +25,15 @@ export GSARLANGA_PID=$$
 trap "exit" SIGINT
 trap onexit EXIT
 
+# process all modified and deleted files
 for file in `git diff --name-only`; do
 	export CURRENT_EDITING_FILE="$file"
 	git diff -- "$file"
+done
+
+# process all added files
+for file in `git ls-files --others --exclude-standard`; do
+	export CURRENT_EDITING_FILE="$file"
+	$REVIEW_GIT_PAGER "$file"
 done
 
