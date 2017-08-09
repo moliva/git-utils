@@ -13,7 +13,7 @@ Make sure you got everything right for the current file and type either:
 * `q` To quit the current diff and skip to the next one
 * `i` To ignore the remaining files and go back to the command line interface
 
-Now everything you've got to do is `commit` and `push` what's already added. :neckbeard:
+Now everything you've got to do is `commit` and `push` what's already staged. :neckbeard:
 
 ## Installation
 
