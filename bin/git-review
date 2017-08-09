@@ -34,6 +34,6 @@ done
 # process all added files
 for file in `git ls-files --others --exclude-standard`; do
 	export CURRENT_EDITING_FILE="$file"
-	$REVIEW_GIT_PAGER "$file"
+	git diff --no-index "$HOME/.git-utils/utils/empty-stub-file" "$file"
 done
 
