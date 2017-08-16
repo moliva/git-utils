@@ -1,5 +1,33 @@
 #!/usr/bin/env sh
 
+# installation dir
+DIR="$(dirname "$(readlink "$0")")"
+INSTALLATION_DIR=`dirname "$DIR"`
+UTILS_DIR="$INSTALLATION_DIR/utils"
+
+# parse args
+INCLUDE_UNTRACKED=false
+
+while [ "$1" != "" ]; do
+	PARAM=`echo $1 | awk -F= '{print $1}'`
+	VALUE=`echo $1 | awk -F= '{print $2}'`
+	case $PARAM in
+		-h | --help)
+			less "$INSTALLATION_DIR/README.MD"
+			exit
+			;;
+		-u | --untracked)
+			INCLUDE_UNTRACKED=true
+			;;
+		*)
+			echo "ERROR: unknown parameter \"$PARAM\""
+			usage
+			exit 1
+			;;
+	esac
+	shift
+done
+
 onexit() {
 	# return envs back to original
 	unset GSARLANGA_PID
@@ -9,9 +37,6 @@ onexit() {
 		git config core.pager "$ORIGINAL_GIT_PAGER"
 	fi
 }
-
-DIR="$(dirname "$(readlink "$0")")"
-UTILS_DIR="`dirname "$DIR"`/utils"
 
 # backup lesskey env
 ORIGINAL_GIT_PAGER="`git config --get core.pager`"
@@ -32,8 +57,9 @@ for file in `git diff --name-only`; do
 done
 
 # process all added files
-for file in `git ls-files --others --exclude-standard`; do
-	export CURRENT_EDITING_FILE="$file"
-	git diff --no-index "$HOME/.git-utils/utils/empty-stub-file" "$file"
-done
-
+if $INCLUDE_UNTRACKED; then
+	for file in `git ls-files --others --exclude-standard`; do
+		export CURRENT_EDITING_FILE="$file"
+		git diff --no-index "$HOME/.git-utils/utils/empty-stub-file" "$file"
+	done
+fi
