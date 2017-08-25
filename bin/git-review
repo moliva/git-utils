@@ -8,6 +8,13 @@ UTILS_DIR="$INSTALLATION_DIR/utils"
 # parse args
 INCLUDE_UNTRACKED=false
 
+usage() {
+	echo "git review [-h|--help]"
+	echo "git review [-u|--untracked]"
+	echo "-u, --untracked"
+	echo "  Adds untracked files to the files being reviewed as if adding with git add -N"
+}
+
 while [ "$1" != "" ]; do
 	PARAM=`echo $1 | awk -F= '{print $1}'`
 	VALUE=`echo $1 | awk -F= '{print $2}'`
@@ -60,6 +67,6 @@ done
 if $INCLUDE_UNTRACKED; then
 	for file in `git ls-files --others --exclude-standard`; do
 		export CURRENT_EDITING_FILE="$file"
-		git diff --no-index "$HOME/.git-utils/utils/empty-stub-file" "$file"
+		git diff --no-index "/dev/null" "$file"
 	done
 fi
