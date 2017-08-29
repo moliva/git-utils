@@ -60,6 +60,7 @@ trap onexit EXIT
 # process all modified and deleted files
 for file in `git diff --name-only`; do
 	export CURRENT_EDITING_FILE="$file"
+	export IS_CURRENTLY_EDITING_FILE_UNTRACKED=false
 	git diff -- "$file"
 done
 
@@ -67,6 +68,7 @@ done
 if $INCLUDE_UNTRACKED; then
 	for file in `git ls-files --others --exclude-standard`; do
 		export CURRENT_EDITING_FILE="$file"
+		export IS_CURRENTLY_EDITING_FILE_UNTRACKED=true
 		git diff --no-index "/dev/null" "$file"
 	done
 fi
