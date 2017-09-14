@@ -3,6 +3,9 @@ A set of git util commands _for the man's pocket and the lady's purse_.
 ## Usage
 
 ### review
+
+![git review usage](resources/git-review-usage.gif "git review usage")
+
 In your local repo just type
 ```bash
 git review # git review -u | --untracked to include untracked files
