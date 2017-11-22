@@ -57,18 +57,20 @@ export GSARLANGA_PID=$$
 trap "exit" SIGINT
 trap onexit EXIT
 
+REPO_PATH="`git rev-parse --show-toplevel`"
+
 # process all modified and deleted files
 for file in `git diff --name-only`; do
-	export CURRENT_EDITING_FILE="$file"
+	export CURRENT_EDITING_FILE="$REPO_PATH/$file"
 	export IS_CURRENTLY_EDITING_FILE_UNTRACKED=false
-	git diff -- "$file"
+	git diff -- "$CURRENT_EDITING_FILE"
 done
 
 # process all added files
 if $INCLUDE_UNTRACKED; then
-	for file in `git ls-files --others --exclude-standard`; do
-		export CURRENT_EDITING_FILE="$file"
+	for file in `(cd "$REPO_PATH" && git ls-files --others --exclude-standard)`; do
+		export CURRENT_EDITING_FILE="$REPO_PATH/$file"
 		export IS_CURRENTLY_EDITING_FILE_UNTRACKED=true
-		git diff --no-index "/dev/null" "$file"
+		git diff --no-index "/dev/null" "$CURRENT_EDITING_FILE"
 	done
 fi
