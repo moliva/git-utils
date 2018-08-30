@@ -1,3 +1,4 @@
 a shell git add "$CURRENT_EDITING_FILE"\nquit\n
 i shell kill -SIGINT "$GSARLANGA_PID"\nquit\n
 o shell $HOME/.git-utils/utils/checkout-confirmation.sh\nquit\n
+Q shell git config review.back true\nquit\n

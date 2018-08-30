@@ -37,6 +37,7 @@ done
 
 onexit() {
 	# return envs back to original
+        git config --unset review.back
 	unset GSARLANGA_PID
 	if [[ -z "${ORIGINAL_GIT_PAGER/ /}" ]]; then
 		git config --unset core.pager
@@ -59,18 +60,52 @@ trap onexit EXIT
 
 REPO_PATH="`git rev-parse --show-toplevel`"
 
+git config --unset review.back
+
 # process all modified and deleted files
-for file in `git diff --name-only`; do
+declare -a files
+files=(`git diff --name-only`)
+for (( i = 0; i < ${#files[*]}; ++ i )); do
+	file=${files[$i]}
+
 	export CURRENT_EDITING_FILE="$REPO_PATH/$file"
 	export IS_CURRENTLY_EDITING_FILE_UNTRACKED=false
+
 	git diff -- "$CURRENT_EDITING_FILE"
+
+	GIT_REVIEW_GO_BACK=$(git config --get review.back)
+	if [ "$GIT_REVIEW_GO_BACK" == "true" ]; then
+		let i-=2
+		if [ "$i" -lt "-1" ]; then
+			let i+=1
+		fi
+	        git config --unset review.back
+	fi
 done
 
 # process all added files
 if $INCLUDE_UNTRACKED; then
-	for file in `(cd "$REPO_PATH" && git ls-files --others --exclude-standard)`; do
+	(
+	cd "$REPO_PATH"
+	declare -a files
+	files=($(git ls-files --others --exclude-standard))
+        for (( i = 0; i < ${#files[*]}; ++ i )); do
+		file=${files[$i]}
+
 		export CURRENT_EDITING_FILE="$REPO_PATH/$file"
 		export IS_CURRENTLY_EDITING_FILE_UNTRACKED=true
+
 		git diff --no-index "/dev/null" "$CURRENT_EDITING_FILE"
+
+		GIT_REVIEW_GO_BACK=$(git config --get review.back)
+	        if [ "$GIT_REVIEW_GO_BACK" == "true" ]; then	
+			let i-=2
+			if [ "$i" -lt "-1" ]; then
+				let i+=1
+			fi
+			git config --unset review.back
+		fi
 	done
+	)
 fi
+

@@ -14,6 +14,7 @@ And one by one the diffs will be shown for each tracked file.
 Make sure you got everything right for the current file and type either:
 * `a` To add the current file to staging area
 * `q` To quit the current diff and skip to the next one
+* `Q` To quit the current diff and go back to the previous one
 * `i` To ignore the remaining files and go back to the command line interface
 * `o` To reset changes for the current file
 
