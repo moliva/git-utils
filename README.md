@@ -20,6 +20,11 @@ Make sure you got everything right for the current file and type either:
 
 Now everything you've got to do is `commit` and `push` what's already staged. :neckbeard:
 
+More options:
+* `-u, --untracked` Adds untracked files to the files being reviewed as if adding with git add -N
+* `-s, --status` Prints git status after the changes are finished been reviewed
+* `-c, --commit` Prompts the user to write a commit message and commits the current staging after the review is done
+
 ## Installation
 
 ### Using curl
