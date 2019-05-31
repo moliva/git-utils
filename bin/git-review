@@ -6,7 +6,8 @@ INSTALLATION_DIR=`dirname "$DIR"`
 UTILS_DIR="$INSTALLATION_DIR/utils"
 
 # parse args
-INCLUDE_UNTRACKED=false
+INCLUDE_UNTRACKED=$(git config --default false --get review.untracked)
+INCLUDE_STATUS=$(git config --default false --get review.status)
 
 usage() {
 	echo "git review [-h|--help]"
@@ -22,6 +23,9 @@ while [ "$1" != "" ]; do
 		-h | --help)
 			less "$INSTALLATION_DIR/README.MD"
 			exit
+			;;
+		-s | --status)
+			INCLUDE_STATUS=true
 			;;
 		-u | --untracked)
 			INCLUDE_UNTRACKED=true
@@ -109,3 +113,6 @@ if $INCLUDE_UNTRACKED; then
 	)
 fi
 
+if $INCLUDE_STATUS; then
+  git status
+fi
